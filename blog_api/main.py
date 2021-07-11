@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 import logging as log
 
-from .apps import posts, users
+from apps.posts import router as post_router
+from apps.users import router as user_router
 
 
 rootLog = log.getLogger()
@@ -11,8 +12,8 @@ log.basicConfig(format='%(message)s')
 
 def create_app():
     app = FastAPI()
-    app.include_router(posts.router, prefix="/posts")
-    app.include_router(users.router, prefix="/users")
+    app.include_router(post_router, prefix="/posts")
+    app.include_router(user_router, prefix="/users")
     return app
 
 
