@@ -10,7 +10,9 @@ pytest = "*"
 fastapi = "*"
 aiohttp = "*"
 uvicorn = "*"
-pydantic = "*"
+pydantic = {extras = ["email"],version = "*"}
+email-validator = "*"
+requests = "*"
 
 [requires]
 python_version = "3.9"
