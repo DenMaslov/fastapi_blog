@@ -24,15 +24,10 @@ class BaseUserRepository(ABC):
 
 class JSONPlaceholderUserRepository(BaseUserRepository):
 
-    def __init__(self):
+    def __init__(self, session: ClientSession):
         self._endpoint = "https://jsonplaceholder.typicode.com/users"
         self._finalizer = weakref.finalize(self, self.close_session)
-        self._session = None
-    
-    async def start_session(self) -> None:
-        if not self._session:
-            log.info(f"Create session in obj {id(self)}")
-            self._session = ClientSession()
+        self._session = session
 
     def close_session(self) -> None:
         if self._session:
@@ -68,8 +63,8 @@ class UserRepositoryFactory:
 
     async def __call__(self) -> BaseUserRepository:
         if self._repo is None:
-            self._repo = JSONPlaceholderUserRepository()
-            await self._repo.start_session()
+            session = ClientSession()
+            self._repo = JSONPlaceholderUserRepository(session=session)
         return self._repo
 
 
