@@ -31,18 +31,13 @@ class BasePostRepository(ABC):
 
 class PostRepository(BasePostRepository):
 
-    def __init__(self) -> None:
+    def __init__(self, session: ClientSession) -> None:
         self._endpoint = "https://jsonplaceholder.typicode.com/posts"
         self._endpoint_author = "https://jsonplaceholder.typicode.com/users/"
         self._endpoint_comment = "https://jsonplaceholder.typicode.com/comments?postId="
-        self._session = None
+        self._session = session
         self._authors: list[User] = []
         self._finalizer = weakref.finalize(self, self.close_session)
-    
-    async def start_session(self) -> None:
-        if not self._session:
-            log.info(f"Create session in obj {id(self)}")
-            self._session = ClientSession()
 
     def close_session(self) -> None:
         if self._session:
@@ -127,8 +122,8 @@ class PostRepositoryFactory:
 
     async def __call__(self) -> BasePostRepository:
         if self._repo is None:
-            self._repo = PostRepository()
-            await self._repo.start_session()
+            session = ClientSession()
+            self._repo = PostRepository(session=session)
         return self._repo
 
 
