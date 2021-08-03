@@ -13,8 +13,15 @@ class Post(BaseModel):
     body: str
     author: User
 
+class Comment(BaseModel):
+    postId: int
+    id: int
+    name: str
+    email: str
+    body: str 
+
 class DetailPost(Post):
-    comments: list
+    comments: list[Comment]
 
 class UpdatePostParams(BaseModel):
     title: str
