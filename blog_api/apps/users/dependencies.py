@@ -8,8 +8,6 @@ from abc import ABC, abstractmethod
 from .models import CreateUserParams, User
 
 
-
-
 class BaseUserRepository(ABC):
     """ UserRepository interface """
 
